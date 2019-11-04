@@ -211,6 +211,21 @@ var _ = Describe("RulesAPIToBackend", func() {
 		Expect(err).ToNot(HaveOccurred())
 	})
 
+	It("[Datastore] should not raise any error while creating client object with custom metadata", func() {
+		_, err := etcdv3.NewEtcdV3Client(&apiconfig.EtcdConfig{
+			EtcdCACert: etcdCACertValue,
+			EtcdCert:   etcdCertValue,
+			EtcdKey:    etcdKeyValue,
+			EtcdCustomGRPCMetadata: map[string]string{
+				"foo": "bar",
+				"one": "two",
+			},
+
+			EtcdEndpoints: "https://127.0.0.1:5007",
+		})
+		Expect(err).ToNot(HaveOccurred())
+	})
+
 	It("[Datastore] should discover etcd via SRV records", func() {
 		_, err := etcdv3.NewEtcdV3Client(&apiconfig.EtcdConfig{
 			EtcdDiscoverySrv: "etcd.local",
